@@ -1,7 +1,7 @@
 variable "management_group_name" {
   type        = string
   description = "The name of the Management Group for which to create a consumption budget."
-  default     = ""
+  default     = null
 }
 
 variable "subscription_id" {

@@ -1,13 +1,13 @@
-data "azurerm_management_group" "this" {
-  count = length(var.management_group_name) > 0 ? 1 : 0
+data "azurerm_management_group" "name" {
+  for_each = var.management_group_name != null ? toset([var.management_group_name]) : toset([])
 
-  name = var.management_group_name
+  name = each.value
 }
 
 resource "azurerm_consumption_budget_management_group" "this" {
-  count = length(var.management_group_name) > 0 ? 1 : 0
+  for_each = var.management_group_name != null ? toset([var.management_group_name]) : toset([])
 
-  management_group_id = one(data.azurerm_management_group.this[*].id)
+  management_group_id = data.azurerm_management_group.name[each.value].id
   name                = coalesce(var.name, local.name)
 
   amount     = var.amount
